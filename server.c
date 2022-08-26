@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
 
     char sendBuff[1025];
     char readBuff[1025];
-    time_t ticks; 
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     memset(&serv_addr, '0', sizeof(serv_addr));
@@ -29,20 +28,19 @@ int main(int argc, char *argv[])
     bind(listenfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)); 
 
     listen(listenfd, 10); 
+    printf("-------------------------\n----------Wait----------\n-------------------------\n");
 
     while(1)
     {
-    printf("aaaaa len = %zu\n", strlen("Hello word\n")+1);
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL); 
-        read(connfd, readBuff, strlen("Hello word\n")+1);
-        printf(" From client: %s \n", readBuff);
-printf("BBBBB\n");
-        ticks = time(NULL);
-//        snprintf(sendBuff, sizeof(sendBuff), "%.24s\r\n", ctime(&ticks));
-        printf("write to client %s\n", readBuff);
-//        write(connfd, sendBuff, strlen(sendBuff));
-write(connfd, readBuff, strlen(readBuff)+1);
-
+        read(connfd, readBuff, strlen("Hello server\n")+1);
+        printf("From client: %s", readBuff);
+        printf("-------------------------\n\n");
+        snprintf(sendBuff, sizeof(sendBuff), "Hello client \n");
+        printf("To client: %s", sendBuff);
+        printf("-------------------------\n\n");
+        write(connfd, sendBuff, strlen(sendBuff)+1);
+        write(connfd, readBuff, strlen(readBuff)+1);
         close(connfd);
         sleep(1);
      }
